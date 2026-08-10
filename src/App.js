@@ -900,4 +900,3 @@ function PaywallGate({r,name}){
       </div>
     </div>
   );
-}
