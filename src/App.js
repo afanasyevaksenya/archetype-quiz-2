@@ -226,7 +226,7 @@ function isUnlocked(){
 function goToCheckout(){
   window.location.href=STRIPE_PAYMENT_LINK;
 }
-}
+
 
 /* ── PDF OVERLAY ─────────────────────────────────────────*/
 function PDFOverlay({r,sec,name,onClose}){
