@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 /* ─────────────────────────────────────────────────────────
    CONFIGURATION
    ───────────────────────────────────────────────────────── */
-const STRIPE_PAYMENT_LINK = "https://afanasyev6.gumroad.com/l/archetype-results?wanted=true";
+const STRIPE_PAYMENT_LINK = https://lifechangequiz.gumroad.com/l/archetype-results;
 const PRICE_DISPLAY = "$9.99";
 const SITE_URL = "https://lifechangequiz.com";
 const DEMO_MODE = false;
