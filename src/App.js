@@ -554,7 +554,7 @@ export default function App(){
         {screen==="name"    &&<NameScreen name={name} setName={setName} onStart={()=>setScreen("quiz")}/>}
         {screen==="quiz"    &&<Quiz    q={Qs[qi]} num={qi+1} total={Qs.length} sel={sel} onSel={setSel} onNext={next} vis={vis}/>}
         {screen==="loading" &&<Loading phrase={PHRASES[pi]}/>}
-        {screen==="results" &&<Results r={RES[sorted[0][0]]} sec={RES[sorted[1][0]]} paid={true} name={"Ksenia"} onRestart={restart}/>}
+        {screen==="results" &&<Results r={RES[sorted[0][0]]} sec={RES[sorted[1][0]]} paid={paid} name={"name"} onRestart={restart}/>}
       </div>
     </>
   );
