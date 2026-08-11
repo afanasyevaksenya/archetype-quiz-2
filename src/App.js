@@ -224,6 +224,8 @@ function isUnlocked(){
   return new URLSearchParams(window.location.search).get("unlocked")==="true";
 }
 function goToCheckout(){
+  window.location.href=STRIPE_PAYMENT_LINK;
+}
   const returnUrl=`${SITE_URL}?unlocked=true`;
   window.location.href=`${STRIPE_PAYMENT_LINK}?success_url=${encodeURIComponent(returnUrl)}`;
 }
