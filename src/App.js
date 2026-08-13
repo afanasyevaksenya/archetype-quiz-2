@@ -226,6 +226,16 @@ function isUnlocked(){
 function goToCheckout(){
   window.location.href=STRIPE_PAYMENT_LINK;
 }
+const RESULT_KEY="archetypeQuizResult";
+  function getSavedResult(){
+    try{
+      const raw=localStorage.getItem(RESULT_KEY);
+      return raw?JSON.parse(raw):null;
+    }catch(e){return null;}
+  }
+  function saveResult(scores,name){
+    try{localStorage.setItem(RESULT_KEY,JSON.stringify({scores,name}));}catch(e){}
+  }
 
 
 /* ── PDF OVERLAY ─────────────────────────────────────────*/
@@ -485,16 +495,30 @@ body{font-family:'Inter',Georgia,sans-serif;color:#2c2010;background:white;font-
 
 /* ── APP ─────────────────────────────────────────────────*/
 export default function App(){
-  const[screen,setScreen]=useState(DEMO_MODE?"results":"intro");
+  const[screen,setScreen]=useState(()=>{
+    if(DEMO_MODE)return "results";
+    if(isUnlocked()&&getSavedResult())return "results";
+    return "intro";
+  });
   const[qi,setQi]=useState(0);
-  const[scores,setScores]=useState(DEMO_MODE?{F:5,C:2,G:2,E:3,S:3}:{F:0,C:0,G:0,E:0,S:0});
+  const[scores,setScores]=useState(()=>{
+    if(DEMO_MODE)return {F:5,C:2,G:2,E:3,S:3};
+    const saved=isUnlocked()?getSavedResult():null;
+    return saved?saved.scores:{F:0,C:0,G:0,E:0,S:0};
+  });
   const[sel,setSel]=useState(null);
   const[vis,setVis]=useState(true);
   const[pi,setPi]=useState(0);
   const[paid,setPaid]=useState(false);
-  const[name,setName]=useState("");
+  const[name,setName]=useState(()=>{
+    const saved=isUnlocked()?getSavedResult():null;
+    return saved?saved.name:"";
+  });
 
   useEffect(()=>{setPaid(isUnlocked());},[]);
+  useEffect(()=>{
+    if(screen==="results")saveResult(scores,name);
+  },[screen,scores,name]);
   useEffect(()=>{
     if(screen!=="loading")return;
     const id=setInterval(()=>setPi(p=>(p+1)%PHRASES.length),850);
@@ -554,7 +578,7 @@ export default function App(){
         {screen==="name"    &&<NameScreen name={name} setName={setName} onStart={()=>setScreen("quiz")}/>}
         {screen==="quiz"    &&<Quiz    q={Qs[qi]} num={qi+1} total={Qs.length} sel={sel} onSel={setSel} onNext={next} vis={vis}/>}
         {screen==="loading" &&<Loading phrase={PHRASES[pi]}/>}
-        {screen==="results" &&<Results r={RES[sorted[0][0]]} sec={RES[sorted[1][0]]} paid={paid} name={"name"} onRestart={restart}/>}
+        {screen==="results" &&<Results r={RES[sorted[0][0]]} sec={RES[sorted[1][0]]} paid={paid} name={name} onRestart={restart}/>}
       </div>
     </>
   );
